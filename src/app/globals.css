@@ -13,6 +13,8 @@
   --color-destructive: var(--destructive);
   --color-estapar: var(--estapar);
   --color-estapar-hover: var(--estapar-hover);
+  --color-estapar-active: var(--estapar-active);
+  --color-estapar-outline: var(--estapar-outline);
   --color-accent-foreground: var(--accent-foreground);
   --color-accent: var(--accent);
   --color-muted-foreground: var(--muted-foreground);
@@ -52,6 +54,8 @@
   --destructive: oklch(0.577 0.245 27.325);
   --estapar: #70d44b;
   --estapar-hover: #61a23d;
+  --estapar-active: #3cb87e;
+  --estapar-outline: #43c457;
   --border: oklch(0.922 0 0);
   --input: oklch(0.922 0 0);
   --ring: oklch(0.708 0 0);
