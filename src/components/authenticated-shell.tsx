@@ -21,18 +21,41 @@ type AuthenticatedShellProps = {
   userName: string
 }
 
+const SIDEBAR_COLLAPSED_STORAGE_KEY = 'estapar:sidebar-collapsed'
+
 export function AuthenticatedShell({
   children,
   userName,
 }: AuthenticatedShellProps) {
-  const [isCollapsed, setIsCollapsed] = useState(false)
+  const [isCollapsed, setIsCollapsed] = useState(() => {
+    if (typeof window === 'undefined') {
+      return false
+    }
+
+    return (
+      window.localStorage.getItem(SIDEBAR_COLLAPSED_STORAGE_KEY) === 'true'
+    )
+  })
+
+  function handleSidebarToggle() {
+    setIsCollapsed((currentIsCollapsed) => {
+      const nextIsCollapsed = !currentIsCollapsed
+
+      window.localStorage.setItem(
+        SIDEBAR_COLLAPSED_STORAGE_KEY,
+        String(nextIsCollapsed)
+      )
+
+      return nextIsCollapsed
+    })
+  }
 
   return (
     <div className="bg-background min-h-dvh md:flex">
       <div className="hidden md:flex md:min-h-dvh">
         <AppSidebar
           isCollapsed={isCollapsed}
-          onToggle={() => setIsCollapsed((current) => !current)}
+          onToggle={handleSidebarToggle}
         />
       </div>
 
