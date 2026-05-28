@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 
@@ -9,6 +10,11 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { users } from '@/mocks/users'
 
 import { LoginForm } from './_components/login-form'
+
+export const metadata: Metadata = {
+  title: 'Login | Portal Estapar B2B',
+  description: 'Acesse o Portal Estapar B2B com suas credenciais.',
+}
 
 export default async function LoginPage() {
   const cookieStore = await cookies()

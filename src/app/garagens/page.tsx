@@ -1,3 +1,4 @@
+import type { Metadata } from 'next'
 import { Building2 } from 'lucide-react'
 import { redirect } from 'next/navigation'
 
@@ -7,6 +8,12 @@ import { AuthenticatedShell } from '@/components/authenticated-shell'
 import { PageHeader } from '@/components/page-header'
 
 import { GaragesTable } from './_components/garages-table'
+
+export const metadata: Metadata = {
+  title: 'Garagens | Portal Estapar B2B',
+  description:
+    'Visualize e gerencie garagens habilitadas para mensalistas digitais no Portal Estapar B2B.',
+}
 
 export default async function GaragensPage() {
   const user = await getAuthenticatedUser()

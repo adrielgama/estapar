@@ -122,3 +122,24 @@ Rotas atuais:
 - `POST /api/logout`
 
 O delay artificial fica centralizado em `src/lib/mock-api-delay.ts`.
+
+## Responsividade
+
+A interface foi construída mobile-first e validada para desktop, tablet e smartphone. Os principais ajustes responsivos estão na navegação lateral, listagem de garagens, sheet de detalhes, QR Code e modal de criação/edição de planos.
+
+## SEO e acessibilidade
+
+- Metadata global e metadata específica nas rotas de login, garagens e mensalistas.
+- HTML semântico com headings significativos.
+- Botões apenas com ícone possuem `aria-label`.
+- Estados de carregamento usam `aria-live`/`role="status"` quando aplicável.
+- Mensagens de validação dos formulários usam `role="alert"`.
+- Componentes interativos preservam navegação por teclado e estados de foco visíveis.
+
+## Segurança
+
+- Autenticação mockada com cookie HTTP-only.
+- Payloads enviados para APIs mockadas são validados com Zod.
+- O formulário de plano usa React Hook Form + Zod no cliente e validação adicional na rota `/api/garage-plans`.
+- Campos monetários são sanitizados e armazenados como dígitos/centavos antes da formatação.
+- Componentes não consomem endpoints externos diretamente; a integração passa por rotas internas em `/api`.

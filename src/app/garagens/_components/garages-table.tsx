@@ -88,13 +88,17 @@ export function GaragesTable() {
             />
             Mensalista Digital
           </label>
-          <span className="self-center text-sm font-medium text-gray-500 md:absolute md:left-1/2 md:-translate-x-1/2">
+          <span
+            className="self-center text-sm font-medium text-gray-500 md:absolute md:left-1/2 md:-translate-x-1/2"
+            aria-live="polite"
+          >
             {isFiltering ? 'Buscando...' : `${filteredGarages.length} registros`}
           </span>
           <div className="relative col-span-2 md:col-span-1 md:justify-self-end">
             <Search className="pointer-events-none absolute top-1/2 left-3 size-5 -translate-y-1/2 text-gray-400" />
             <Input
               value={search}
+              aria-label="Buscar garagem por nome"
               placeholder="Buscar por nome"
               className="h-11 bg-transparent! pl-10 shadow-none"
               onChange={(event) => setSearch(event.target.value)}
@@ -102,7 +106,10 @@ export function GaragesTable() {
           </div>
         </div>
 
-        <div className="border-border overflow-hidden rounded-md border">
+        <div
+          className="border-border overflow-hidden rounded-md border"
+          aria-busy={isFiltering}
+        >
           <Table>
             <TableHeader>
               <TableRow className="hover:bg-transparent">
