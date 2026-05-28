@@ -39,7 +39,15 @@ export function GarageDiscountsPanel({ garage }: GarageDiscountsPanelProps) {
                   {discount.percentage}%
                 </TableCell>
                 <TableCell className="h-14 px-4">
-                  <Badge variant="outline">{discount.status}</Badge>
+                  <Badge
+                    variant={
+                      discount.status.toLocaleLowerCase() === 'ativo'
+                        ? 'estapar'
+                        : 'secondary'
+                    }
+                  >
+                    {discount.status}
+                  </Badge>
                 </TableCell>
               </TableRow>
             ))}

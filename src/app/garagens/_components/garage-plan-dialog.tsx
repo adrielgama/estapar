@@ -2,8 +2,16 @@
 
 import { useState } from 'react'
 import type { GaragePlan } from '@/types/garage'
+import { Loader2 } from 'lucide-react'
+import { toast } from 'sonner'
+import { z } from 'zod/v3'
 
-import { cn } from '@/lib/utils'
+import {
+  cn,
+  formatCurrencyFromCents,
+  getCurrencyInputValue,
+  getOnlyDigits,
+} from '@/lib/utils'
 
 import { Button } from '@/components/ui/button'
 import {
@@ -46,8 +54,35 @@ type GaragePlanFormState = {
 }
 
 type GaragePlanFormErrors = Partial<
-  Record<'spots' | 'value' | 'cancellationValue', string>
+  Record<keyof GaragePlanFormState, string>
 >
+
+const garagePlanFormSchema = z
+  .object({
+    description: z.string().trim().min(1, 'Informe a descrição do plano.'),
+    status: z.enum(['Ativo', 'Inativo']),
+    vehicleType: z.enum(['car', 'motorcycle', 'truck']),
+    spots: z
+      .string()
+      .regex(/^\d+$/, 'Informe apenas números.')
+      .refine((value) => Number(value) > 0, 'Informe um número maior que zero.'),
+    value: z
+      .string()
+      .regex(/^\d+$/, 'Informe apenas números.')
+      .refine((value) => Number(value) > 0, 'Informe um valor maior que zero.'),
+    cancellationValue: z
+      .string()
+      .regex(/^\d+$/, 'Informe apenas números.'),
+    startsAt: z.string().min(1, 'Informe o início da validade.'),
+    endsAt: z.string(),
+  })
+  .refine(
+    (values) => !values.endsAt || values.endsAt >= values.startsAt,
+    {
+      path: ['endsAt'],
+      message: 'A data final deve ser posterior ao início.',
+    }
+  )
 
 const defaultFormState: GaragePlanFormState = {
   description: '',
@@ -70,28 +105,35 @@ function getInitialFormState(plan: GaragePlan | null): GaragePlanFormState {
     status: plan.status,
     vehicleType: 'car',
     spots: String(plan.spots),
-    value: plan.value.replace('R$ ', ''),
+    value: getOnlyDigits(plan.value),
     cancellationValue: '0',
     startsAt: '2025-06-20',
     endsAt: '',
   }
 }
 
-function formatCurrency(value: string) {
-  const numericValue = Number(value)
+function getGaragePlanFormErrors(
+  formState: GaragePlanFormState
+): GaragePlanFormErrors {
+  const result = garagePlanFormSchema.safeParse(formState)
 
-  if (!Number.isFinite(numericValue)) {
-    return 'R$ 0,00'
+  if (result.success) {
+    return {}
   }
 
-  return new Intl.NumberFormat('pt-BR', {
-    style: 'currency',
-    currency: 'BRL',
-  }).format(numericValue)
+  const fieldErrors = result.error.flatten().fieldErrors
+
+  return Object.fromEntries(
+    Object.entries(fieldErrors)
+      .map(([field, messages]) => [field, messages?.[0]])
+      .filter(([, message]) => Boolean(message))
+  ) as GaragePlanFormErrors
 }
 
-function getOnlyDigits(value: string) {
-  return value.replace(/\D/g, '')
+function waitForPlanSave() {
+  return new Promise((resolve) => {
+    window.setTimeout(resolve, 900)
+  })
 }
 
 export function GaragePlanDialog({
@@ -103,6 +145,7 @@ export function GaragePlanDialog({
 }: GaragePlanDialogProps) {
   const [formState, setFormState] = useState(() => getInitialFormState(plan))
   const [formErrors, setFormErrors] = useState<GaragePlanFormErrors>({})
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   function updateFormState<Key extends keyof GaragePlanFormState>(
     key: Key,
@@ -111,6 +154,10 @@ export function GaragePlanDialog({
     setFormState((currentFormState) => ({
       ...currentFormState,
       [key]: value,
+    }))
+    setFormErrors((currentFormErrors) => ({
+      ...currentFormErrors,
+      [key]: undefined,
     }))
   }
 
@@ -125,27 +172,18 @@ export function GaragePlanDialog({
     }))
   }
 
-  function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault()
 
-    const nextFormErrors: GaragePlanFormErrors = {}
-
-    if (!formState.spots || Number(formState.spots) < 1) {
-      nextFormErrors.spots = 'Informe um número maior que zero.'
-    }
-
-    if (!formState.value) {
-      nextFormErrors.value = 'Informe apenas números.'
-    }
-
-    if (!formState.cancellationValue) {
-      nextFormErrors.cancellationValue = 'Informe apenas números.'
-    }
+    const nextFormErrors = getGaragePlanFormErrors(formState)
 
     if (Object.keys(nextFormErrors).length > 0) {
       setFormErrors(nextFormErrors)
       return
     }
+
+    setIsSubmitting(true)
+    await waitForPlanSave()
 
     const spots = Number(formState.spots)
     const occupied = plan?.occupied ?? 0
@@ -153,12 +191,18 @@ export function GaragePlanDialog({
     onSubmit({
       id: plan?.id ?? `plan-${crypto.randomUUID()}`,
       description: formState.description.trim() || 'Novo plano',
-      value: formatCurrency(formState.value),
+      value: formatCurrencyFromCents(formState.value),
       spots,
       occupied,
       available: Math.max(spots - occupied, 0),
       status: formState.status,
     })
+    toast.success(
+      mode === 'create'
+        ? 'Plano criado com sucesso.'
+        : 'Plano atualizado com sucesso.'
+    )
+    setIsSubmitting(false)
   }
 
   return (
@@ -194,8 +238,14 @@ export function GaragePlanDialog({
                   updateFormState('description', event.target.value)
                 }
                 placeholder="Digite a descrição do plano"
+                aria-invalid={Boolean(formErrors.description)}
                 className="h-9 px-4 text-sm sm:text-base"
               />
+              {formErrors.description && (
+                <p className="text-destructive text-sm" role="alert">
+                  {formErrors.description}
+                </p>
+              )}
             </div>
 
             <div className="space-y-2 sm:space-y-3">
@@ -271,8 +321,7 @@ export function GaragePlanDialog({
               <Input
                 id="plan-value"
                 inputMode="numeric"
-                pattern="[0-9]*"
-                value={formState.value}
+                value={getCurrencyInputValue(formState.value)}
                 onChange={(event) =>
                   updateNumericFormState('value', event.target.value)
                 }
@@ -294,8 +343,7 @@ export function GaragePlanDialog({
               <Input
                 id="plan-cancellation-value"
                 inputMode="numeric"
-                pattern="[0-9]*"
-                value={formState.cancellationValue}
+                value={getCurrencyInputValue(formState.cancellationValue)}
                 onChange={(event) =>
                   updateNumericFormState(
                     'cancellationValue',
@@ -323,8 +371,14 @@ export function GaragePlanDialog({
                 onChange={(event) =>
                   updateFormState('startsAt', event.target.value)
                 }
+                aria-invalid={Boolean(formErrors.startsAt)}
                 className="h-9 px-4 text-sm sm:text-base"
               />
+              {formErrors.startsAt && (
+                <p className="text-destructive text-sm" role="alert">
+                  {formErrors.startsAt}
+                </p>
+              )}
             </div>
 
             <div className="space-y-2 sm:space-y-3">
@@ -338,16 +392,23 @@ export function GaragePlanDialog({
                 onChange={(event) =>
                   updateFormState('endsAt', event.target.value)
                 }
+                aria-invalid={Boolean(formErrors.endsAt)}
                 className="h-9 px-4 text-sm sm:text-base"
               />
+              {formErrors.endsAt && (
+                <p className="text-destructive text-sm" role="alert">
+                  {formErrors.endsAt}
+                </p>
+              )}
             </div>
           </div>
 
-          <DialogFooter className="shrink-0 bg-popover px-5 pt-4 pb-5 sm:px-6">
+          <DialogFooter className="bg-popover shrink-0 px-5 pt-4 pb-5 sm:px-6">
             <DialogClose asChild>
               <Button
                 type="button"
                 variant="outline"
+                disabled={isSubmitting}
                 className="h-11 px-8 sm:h-12"
               >
                 Cancelar
@@ -356,9 +417,15 @@ export function GaragePlanDialog({
             <Button
               type="submit"
               variant="estapar"
+              disabled={isSubmitting}
               className="h-11 px-8 sm:h-12"
             >
-              {mode === 'create' ? 'Criar' : 'Salvar'}
+              {isSubmitting && <Loader2 className="size-4 animate-spin" />}
+              {isSubmitting
+                ? 'Salvando...'
+                : mode === 'create'
+                  ? 'Criar'
+                  : 'Salvar'}
             </Button>
           </DialogFooter>
         </form>

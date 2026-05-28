@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 
 import { QueryProvider } from '@/components/query-provider'
+import { Toaster } from '@/components/ui/sonner'
 
 import './globals.css'
 
@@ -31,6 +32,7 @@ export default function RootLayout({
     >
       <body className="flex min-h-full flex-col">
         <QueryProvider>{children}</QueryProvider>
+        <Toaster richColors theme="light" position="top-right" />
       </body>
     </html>
   )

@@ -75,7 +75,13 @@ export function GaragePlansPanel({
                   {plan.available}
                 </TableCell>
                 <TableCell className="h-14 px-4">
-                  <Badge variant="outline" className="text-gray-400">
+                  <Badge
+                    variant={
+                      plan.status.toLocaleLowerCase() === 'ativo'
+                        ? 'estapar'
+                        : 'secondary'
+                    }
+                  >
                     {plan.status}
                   </Badge>
                 </TableCell>
