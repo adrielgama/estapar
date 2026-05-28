@@ -19,7 +19,9 @@ export function formatCurrencyFromCents(value: string) {
   return new Intl.NumberFormat('pt-BR', {
     style: 'currency',
     currency: 'BRL',
-  }).format(numericValue)
+  })
+    .format(numericValue)
+    .replace(/\u00a0/g, ' ')
 }
 
 export function getCurrencyInputValue(value: string) {
