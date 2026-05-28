@@ -13,7 +13,7 @@ export default async function GaragensPage() {
 
   return (
     <AuthenticatedShell userName={user.name}>
-      <section className="px-6 py-8 md:px-16 md:py-14">
+      <section className="p-4 md:p-6">
         <div className="max-w-4xl">
           <h1 className="text-4xl font-semibold tracking-normal text-gray-900">
             Garagens
