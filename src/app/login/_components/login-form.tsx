@@ -11,6 +11,8 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 
+import { users } from '@/mocks/users'
+
 import { login } from './login'
 
 const loginSchema = z.object({
@@ -24,10 +26,13 @@ const loginSchema = z.object({
 
 type LoginFormValues = z.infer<typeof loginSchema>
 
+const testUser = users[0]
+
 export function LoginForm() {
   const router = useRouter()
   const form = useForm<LoginFormValues>({
     resolver: zodResolver(loginSchema),
+    mode: 'onChange',
     defaultValues: {
       email: '',
       password: '',
@@ -114,16 +119,18 @@ export function LoginForm() {
       />
 
       {form.formState.errors.root?.message ? (
-        <p
-          className="text-destructive flex flex-col text-xs font-medium"
-          role="alert"
-        >
-          {form.formState.errors.root.message}
-          <span className="text-muted-foreground/70 mt-4">
-            E-mail: roberto@email.com
-          </span>
-          <span className="text-muted-foreground/70">Senha: 12345</span>
-        </p>
+        <div className="space-y-4" role="alert">
+          <p className="text-destructive text-xs font-medium">
+            {form.formState.errors.root.message}
+          </p>
+          <div className="rounded-md border border-dashed border-gray-200 bg-gray-50 p-4 text-xs text-gray-500">
+            <p className="font-semibold text-gray-700">Credenciais de teste</p>
+            <div className="mt-2 flex flex-col gap-1">
+              <span>E-mail: {testUser.email}</span>
+              <span>Senha: {testUser.password}</span>
+            </div>
+          </div>
+        </div>
       ) : null}
 
       <Button
@@ -131,7 +138,7 @@ export function LoginForm() {
         size="lg"
         variant="estapar"
         className="w-full py-6 font-semibold"
-        disabled={loginMutation.isPending}
+        disabled={!form.formState.isValid || loginMutation.isPending}
       >
         {loginMutation.isPending ? (
           <>

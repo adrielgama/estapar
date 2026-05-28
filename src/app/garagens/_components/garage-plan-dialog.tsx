@@ -5,8 +5,11 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { Loader2 } from 'lucide-react'
 import { Controller, useForm, type SubmitHandler } from 'react-hook-form'
 import { toast } from 'sonner'
-import { z } from 'zod/v3'
 
+import {
+  garagePlanFormSchema,
+  type GaragePlanFormValues,
+} from '@/lib/garage-plan-schema'
 import { cn, getCurrencyInputValue, getOnlyDigits } from '@/lib/utils'
 
 import { Button } from '@/components/ui/button'
@@ -37,33 +40,6 @@ type GaragePlanDialogProps = {
   onOpenChange: (open: boolean) => void
   onSubmit: (plan: GaragePlan) => void
 }
-
-const garagePlanFormSchema = z
-  .object({
-    description: z.string().trim().min(1, 'Informe a descrição do plano.'),
-    status: z.enum(['Ativo', 'Inativo']),
-    vehicleType: z.enum(['car', 'motorcycle', 'truck']),
-    spots: z
-      .string()
-      .regex(/^\d+$/, 'Informe apenas números.')
-      .refine(
-        (value) => Number(value) > 0,
-        'Informe um número maior que zero.'
-      ),
-    value: z
-      .string()
-      .regex(/^\d+$/, 'Informe apenas números.')
-      .refine((value) => Number(value) > 0, 'Informe um valor maior que zero.'),
-    cancellationValue: z.string().regex(/^\d+$/, 'Informe apenas números.'),
-    startsAt: z.string().min(1, 'Informe o início da validade.'),
-    endsAt: z.string(),
-  })
-  .refine((values) => !values.endsAt || values.endsAt >= values.startsAt, {
-    path: ['endsAt'],
-    message: 'A data final deve ser posterior ao início.',
-  })
-
-type GaragePlanFormValues = z.infer<typeof garagePlanFormSchema>
 
 type SaveGaragePlanResponse = {
   plan: GaragePlan
