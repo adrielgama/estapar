@@ -27,7 +27,7 @@ export function NavigationCard({
       )}
     >
       <ArrowRight className="absolute top-8 right-8 size-6 text-gray-300 transition-colors group-hover:text-gray-500" />
-      <Icon className="size-11 text-[#74d83a]" strokeWidth={2.25} />
+      <Icon className="size-11 text-estapar" strokeWidth={2.25} />
       <div className="mt-8 space-y-4">
         <h2 className="text-xl font-semibold text-gray-950">{title}</h2>
         <p className="text-base leading-7 text-gray-500">{description}</p>

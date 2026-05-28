@@ -71,7 +71,7 @@ export function AppSidebar({
           type="button"
           variant="outline"
           size="icon-sm"
-          className="bg-background! absolute top-20 -right-4 z-10 size-8 transform rounded-full shadow-sm"
+          className="bg-background! absolute top-20 -right-4 z-10 size-8 transform rounded-full"
           aria-label={isCollapsed ? 'Expandir menu' : 'Recolher menu'}
           onClick={onToggle}
         >
@@ -85,8 +85,8 @@ export function AppSidebar({
 
       <nav
         className={cn(
-          'flex flex-col gap-4 py-9',
-          isCollapsed && !isMobile ? 'items-center px-3' : 'px-2'
+          'flex flex-col py-9',
+          isCollapsed && !isMobile ? 'items-center px-3' : 'px-0'
         )}
         aria-label="Navegação principal"
       >
@@ -97,11 +97,11 @@ export function AppSidebar({
             <Link
               href={item.href}
               className={cn(
-                'focus-visible:ring-ring/50 flex h-12 items-center rounded-md text-sm text-gray-600 transition-colors hover:bg-gray-100 hover:text-gray-950 focus-visible:ring-3 focus-visible:outline-none',
+                'focus-visible:ring-ring/50 flex h-12 items-center text-sm text-gray-600 transition-colors hover:bg-gray-200 hover:text-gray-950 focus-visible:ring-3 focus-visible:outline-none',
                 isCollapsed && !isMobile
                   ? 'w-12 justify-center'
                   : 'w-full gap-4 px-4',
-                isActive && 'text-gray-950'
+                isActive && 'bg-gray-100 font-semibold text-gray-950'
               )}
               aria-current={isActive ? 'page' : undefined}
               title={isCollapsed && !isMobile ? item.title : undefined}
