@@ -3,7 +3,7 @@ import { redirect } from 'next/navigation'
 
 import { SESSION_COOKIE_NAME } from '@/lib/session-cookie'
 
-import Logo from '@/components/logo'
+import { Logo } from '@/components/logo'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
 import { users } from '@/mocks/users'

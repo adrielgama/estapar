@@ -4,7 +4,7 @@ import { getAuthenticatedUser } from '@/lib/get-authenticated-user'
 
 import { AuthenticatedShell } from '@/components/authenticated-shell'
 
-export default async function Home() {
+export default async function MensalistasPage() {
   const user = await getAuthenticatedUser()
 
   if (!user) {
@@ -15,13 +15,11 @@ export default async function Home() {
     <AuthenticatedShell userName={user.name}>
       <section className="px-6 py-8 md:px-16 md:py-14">
         <div className="max-w-4xl">
-          <h1 className="text-4xl font-semibold tracking-normal text-gray-800">
-            Bem-vindo ao Portal Estapar B2B
+          <h1 className="text-4xl font-semibold tracking-normal text-gray-900">
+            Mensalistas
           </h1>
-          <p className="mt-6 text-lg leading-8 text-gray-500">
-            Gerencie seus serviços de estacionamento, acesse relatórios,
-            configure credenciados e contrate planos de mensalidade em um só
-            lugar.
+          <p className="mt-6 max-w-xl text-xl leading-8 text-gray-600">
+            Consulte e administre clientes mensalistas vinculados às garagens.
           </p>
         </div>
       </section>

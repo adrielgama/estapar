@@ -16,6 +16,7 @@
 - Do not use feature-first architecture.
 - Prefer one function per file.
 - Shared components go in `components/`.
+- Global layout/navigation components shared by logged-in routes go in `components/`, not in `app/_components/`.
 - Route-specific reusable components go in `_components/`.
 - Shared types go in `types/`.
 - Shared hooks go in `hooks/`.
