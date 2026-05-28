@@ -26,6 +26,8 @@ https://estapar-sooty.vercel.app/
 - Zod
 - TanStack Query
 - Sonner
+- Vitest
+- Vercel
 
 ## Requisitos
 
@@ -50,6 +52,17 @@ Acesse:
 
 ```text
 http://localhost:3000
+```
+
+## Scripts
+
+```bash
+pnpm dev
+pnpm lint
+pnpm typecheck
+pnpm test
+pnpm build
+pnpm start
 ```
 
 ## Login
@@ -143,3 +156,19 @@ A interface foi construída mobile-first e validada para desktop, tablet e smart
 - O formulário de plano usa React Hook Form + Zod no cliente e validação adicional na rota `/api/garage-plans`.
 - Campos monetários são sanitizados e armazenados como dígitos/centavos antes da formatação.
 - Componentes não consomem endpoints externos diretamente; a integração passa por rotas internas em `/api`.
+
+## Testes
+
+O projeto usa Vitest para testes unitários e de contrato das rotas mockadas.
+
+Cobertura atual:
+
+- Helpers de moeda em `src/lib/utils.ts`.
+- Schema Zod do formulário de plano.
+- Rota `POST /api/garage-plans`.
+
+Execute:
+
+```bash
+pnpm test
+```
