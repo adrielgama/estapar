@@ -1,36 +1,124 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Portal Estapar B2B
 
-## Getting Started
+Aplicação Next.js para gerenciamento de garagens habilitadas para mensalistas digitais. O projeto usa dados mockados com rotas `/api` para simular contratos de backend.
 
-First, run the development server:
+Este projeto foi desenvolvido como desafio técnico para uma vaga de Desenvolvedor Front-end Pleno na Estapar. O objetivo é criar uma interface funcional e responsiva baseada nos requisitos fornecidos em design e API mockada, simulando a operação real de um sistema usado por gestores da Estapar.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+Design de referência:
+
+```text
+https://www.figma.com/design/cwvQ8KyQNAu2eiXsSfok73/Figma-basics?node-id=1669-162202&p=f
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Deploy:
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```text
+https://estapar-sooty.vercel.app/
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## Stack
 
-## Learn More
+- Next.js App Router
+- TypeScript
+- Tailwind CSS
+- shadcn/ui
+- React Hook Form
+- Zod
+- TanStack Query
+- Sonner
 
-To learn more about Next.js, take a look at the following resources:
+## Requisitos
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Node.js compatível com Next.js 16
+- pnpm
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Como rodar
 
-## Deploy on Vercel
+Instale as dependências:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+pnpm install
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Rode o servidor de desenvolvimento:
+
+```bash
+pnpm dev
+```
+
+Acesse:
+
+```text
+http://localhost:3000
+```
+
+## Login
+
+A autenticação é mockada em `/api/login`.
+
+Usuário disponível em `src/mocks/users.ts`:
+
+```text
+email: roberto.freitas@estapar.com.br
+senha: 12345
+```
+
+Consulte o arquivo de mock para a senha correspondente.
+
+## Estrutura
+
+```text
+src/app/
+  api/                 Rotas mockadas usadas como contrato de API
+  garagens/            Página e componentes da listagem/detalhes de garagens
+  login/               Página e formulário de login
+  mensalistas/         Página de mensalistas
+  loading.tsx          Fallback global de carregamento
+  not-found.tsx        Página 404 customizada
+
+src/components/
+  ui/                  Componentes shadcn/ui
+  *.tsx                Componentes compartilhados da aplicação
+
+src/lib/
+  utils.ts             Helpers compartilhados
+  mock-api-delay.ts    Delay artificial para simular chamadas de API
+  session-cookie.ts    Configuração do cookie de sessão
+
+src/mocks/
+  garages.ts           Dados mockados de garagens
+  users.ts             Usuários mockados
+
+src/types/
+  garage.ts            Tipos de garagem, planos, descontos e configurações
+  user.ts              Tipo de usuário autenticado
+```
+
+## Funcionalidades
+
+- Login mockado com cookie HTTP-only.
+- Layout autenticado com navegação lateral.
+- Listagem de garagens via `/api/garages`.
+- Filtro por mensalista digital e busca por nome com debounce simulado.
+- Detalhes da garagem em sheet lateral.
+- QR Code real por garagem.
+- Tabs para planos, descontos e configurações.
+- Criação e edição de planos em modal.
+- Formulário de plano com React Hook Form + Zod.
+- Salvamento de plano via `/api/garage-plans` com delay simulado.
+- Toast de confirmação ao salvar.
+- Página 404 customizada para rotas não mapeadas.
+- Loading global do App Router para transições/carregamentos de rota.
+
+## API Mock
+
+As telas sempre chamam rotas internas em `/api`, mesmo usando dados mockados.
+
+Rotas atuais:
+
+- `GET /api/garages`
+- `POST /api/garage-plans`
+- `POST /api/login`
+- `POST /api/logout`
+
+O delay artificial fica centralizado em `src/lib/mock-api-delay.ts`.
