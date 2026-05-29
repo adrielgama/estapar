@@ -137,7 +137,7 @@ export function GaragePlanDialog({
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-hidden p-0 sm:max-w-2xl">
+      <DialogContent className="max-h-[calc(100dvh-2rem)] overflow-hidden p-0 sm:max-w-2xl xl:max-w-4xl">
         <form
           onSubmit={form.handleSubmit(handlePlanSubmit)}
           className="flex max-h-[calc(100dvh-2rem)] min-h-0 flex-col"
@@ -153,12 +153,12 @@ export function GaragePlanDialog({
             </DialogDescription>
           </DialogHeader>
 
-          <div className="mt-5 grid min-h-0 flex-1 gap-4 overflow-y-auto px-5 pb-5 sm:mt-8 sm:gap-6 sm:px-6 md:grid-cols-2">
+          <div className="mt-5 grid min-h-0 flex-1 gap-4 overflow-y-auto px-5 pb-5 sm:mt-8 sm:gap-6 sm:px-6 xl:grid-cols-2">
             <Controller
               control={form.control}
               name="description"
               render={({ field, fieldState }) => (
-                <div className="space-y-2 sm:space-y-3">
+                <div className="min-w-0 space-y-2 sm:space-y-3">
                   <Label htmlFor={field.name} className="text-sm sm:text-base">
                     Descrição
                   </Label>
@@ -167,7 +167,7 @@ export function GaragePlanDialog({
                     id={field.name}
                     placeholder="Digite a descrição do plano"
                     aria-invalid={fieldState.invalid}
-                    className="h-9 px-4 text-sm sm:text-base"
+                    className="h-9 w-full max-w-full px-4 text-sm sm:text-base"
                   />
                   {fieldState.invalid ? (
                     <p className="text-destructive text-sm" role="alert">
@@ -182,7 +182,7 @@ export function GaragePlanDialog({
               control={form.control}
               name="status"
               render={({ field }) => (
-                <div className="space-y-2 sm:space-y-3">
+                <div className="min-w-0 space-y-2 sm:space-y-3">
                   <Label htmlFor={field.name} className="text-sm sm:text-base">
                     Status
                   </Label>
@@ -215,12 +215,15 @@ export function GaragePlanDialog({
               control={form.control}
               name="vehicleType"
               render={({ field }) => (
-                <div className="space-y-2 sm:space-y-3">
+                <div className="min-w-0 space-y-2 sm:space-y-3">
                   <Label htmlFor={field.name} className="text-sm sm:text-base">
                     Tipo de Veículo
                   </Label>
                   <Select value={field.value} onValueChange={field.onChange}>
-                    <SelectTrigger id={field.name} className="h-9 w-full px-4">
+                    <SelectTrigger
+                      id={field.name}
+                      className="h-9 w-full max-w-full px-4"
+                    >
                       <SelectValue placeholder="Selecione" />
                     </SelectTrigger>
                     <SelectContent>
@@ -237,7 +240,7 @@ export function GaragePlanDialog({
               control={form.control}
               name="spots"
               render={({ field, fieldState }) => (
-                <div className="space-y-2 sm:space-y-3">
+                <div className="min-w-0 space-y-2 sm:space-y-3">
                   <Label htmlFor={field.name} className="text-sm sm:text-base">
                     Total de Vagas
                   </Label>
@@ -250,7 +253,7 @@ export function GaragePlanDialog({
                       field.onChange(getOnlyDigits(event.target.value))
                     }
                     aria-invalid={fieldState.invalid}
-                    className="h-9 px-4 text-sm sm:text-base"
+                    className="h-9 w-full max-w-full px-4 text-sm sm:text-base"
                   />
                   {fieldState.invalid ? (
                     <p className="text-destructive text-sm" role="alert">
@@ -265,7 +268,7 @@ export function GaragePlanDialog({
               control={form.control}
               name="value"
               render={({ field, fieldState }) => (
-                <div className="space-y-2 sm:space-y-3">
+                <div className="min-w-0 space-y-2 sm:space-y-3">
                   <Label htmlFor={field.name} className="text-sm sm:text-base">
                     Valor (R$)
                   </Label>
@@ -280,7 +283,7 @@ export function GaragePlanDialog({
                       field.onChange(getOnlyDigits(event.target.value))
                     }
                     aria-invalid={fieldState.invalid}
-                    className="h-9 px-4 text-sm sm:text-base"
+                    className="h-9 w-full max-w-full px-4 text-sm sm:text-base"
                   />
                   {fieldState.invalid ? (
                     <p className="text-destructive text-sm" role="alert">
@@ -295,7 +298,7 @@ export function GaragePlanDialog({
               control={form.control}
               name="cancellationValue"
               render={({ field, fieldState }) => (
-                <div className="space-y-2 sm:space-y-3">
+                <div className="min-w-0 space-y-2 sm:space-y-3">
                   <Label htmlFor={field.name} className="text-sm sm:text-base">
                     Valor do Cancelamento (R$)
                   </Label>
@@ -310,7 +313,7 @@ export function GaragePlanDialog({
                       field.onChange(getOnlyDigits(event.target.value))
                     }
                     aria-invalid={fieldState.invalid}
-                    className="h-9 px-4 text-sm sm:text-base"
+                    className="h-9 w-full max-w-full px-4 text-sm sm:text-base"
                   />
                   {fieldState.invalid ? (
                     <p className="text-destructive text-sm" role="alert">
@@ -325,7 +328,7 @@ export function GaragePlanDialog({
               control={form.control}
               name="startsAt"
               render={({ field, fieldState }) => (
-                <div className="space-y-2 sm:space-y-3">
+                <div className="min-w-0 space-y-2 sm:space-y-3">
                   <Label htmlFor={field.name} className="text-sm sm:text-base">
                     Início da Validade
                   </Label>
@@ -334,7 +337,7 @@ export function GaragePlanDialog({
                     id={field.name}
                     type="date"
                     aria-invalid={fieldState.invalid}
-                    className="h-9 px-4 text-sm sm:text-base"
+                    className="h-9 w-full max-w-full min-w-0 appearance-none overflow-hidden px-4 text-left text-sm text-ellipsis sm:text-base [&::-webkit-date-and-time-value]:m-0 [&::-webkit-date-and-time-value]:min-w-0 [&::-webkit-date-and-time-value]:text-left"
                   />
                   {fieldState.invalid ? (
                     <p className="text-destructive text-sm" role="alert">
@@ -349,7 +352,7 @@ export function GaragePlanDialog({
               control={form.control}
               name="endsAt"
               render={({ field, fieldState }) => (
-                <div className="space-y-2 sm:space-y-3">
+                <div className="min-w-0 space-y-2 sm:space-y-3">
                   <Label htmlFor={field.name} className="text-sm sm:text-base">
                     Fim da Validade
                   </Label>
@@ -358,7 +361,7 @@ export function GaragePlanDialog({
                     id={field.name}
                     type="date"
                     aria-invalid={fieldState.invalid}
-                    className="h-9 px-4 text-sm sm:text-base"
+                    className="h-9 w-full max-w-full min-w-0 appearance-none overflow-hidden px-4 text-left text-sm text-ellipsis sm:text-base [&::-webkit-date-and-time-value]:m-0 [&::-webkit-date-and-time-value]:min-w-0 [&::-webkit-date-and-time-value]:text-left"
                   />
                   {fieldState.invalid ? (
                     <p className="text-destructive text-sm" role="alert">
