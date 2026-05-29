@@ -77,7 +77,7 @@ export function GaragesTable() {
   return (
     <>
       <div className="space-y-5">
-        <div className="border-border relative grid grid-cols-[1fr_auto] gap-4 rounded-md border p-4 md:grid-cols-[1fr_15rem] md:items-center">
+        <div className="border-border relative grid grid-cols-[1fr_auto] gap-4 rounded-md border p-4 lg:grid-cols-[1fr_15rem] lg:items-center">
           <label className="flex items-center gap-3 font-semibold text-gray-800">
             <Switch
               checked={onlyDigitalMonthly}
@@ -89,12 +89,12 @@ export function GaragesTable() {
             Mensalista Digital
           </label>
           <span
-            className="self-center text-sm font-medium text-gray-500 md:absolute md:left-1/2 md:-translate-x-1/2"
+            className="self-center text-sm font-medium text-gray-500 lg:absolute lg:left-1/2 lg:-translate-x-1/2"
             aria-live="polite"
           >
             {isFiltering ? 'Buscando...' : `${filteredGarages.length} registros`}
           </span>
-          <div className="relative col-span-2 md:col-span-1 md:justify-self-end">
+          <div className="relative col-span-2 lg:col-span-1 lg:justify-self-end">
             <Search className="pointer-events-none absolute top-1/2 left-3 size-5 -translate-y-1/2 text-gray-400" />
             <Input
               value={search}
